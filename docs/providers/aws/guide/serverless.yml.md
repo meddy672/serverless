@@ -16,7 +16,8 @@ layout: Doc
 
 Here is a list of all available properties in `serverless.yml` when the provider is set to `aws`.
 
-## Root properties
+<details>
+  <summary>Root properties</summary>
 
 ```yml
 # serverless.yml
@@ -42,7 +43,10 @@ disabledDeprecations:
   - '*' # Disable all deprecation messages
 ```
 
-### Parameters
+</details>
+
+<details>
+  <summary>Parameters</summary>
 
 Learn more about stage parameters in the [Parameters documentation](../../../guides/parameters.md).
 
@@ -59,96 +63,124 @@ params:
     my-parameter: bar
 ```
 
-## Provider
+</details>
 
-### General settings
-
+<details>
+  <summary>Provider</summary>
+  <ol>
+  <li>
+  <details>
+  <summary>General settings</summary>
+      
 ```yml
 # serverless.yml
 
 provider:
-  name: aws
-  # Default stage (default: dev)
-  stage: dev
-  # Default region (default: us-east-1)
-  region: us-east-1
-  # The AWS profile to use to deploy (default: "default" profile)
-  profile: production
-  # Use a custom name for the CloudFormation stack
-  stackName: custom-stack-name
-  # Optional CloudFormation tags to apply to APIs and functions
-  tags:
-    foo: bar
-    baz: qux
-  # Optional CloudFormation tags to apply to the stack
-  stackTags:
-    key: value
-  # Method used for CloudFormation deployments: 'changesets' or 'direct' (default: changesets)
-  # See https://www.serverless.com/framework/docs/providers/aws/guide/deploying#deployment-method
-  deploymentMethod: direct
-  # List of existing Amazon SNS topics in the same region where notifications about stack events are sent.
-  notificationArns:
-    - 'arn:aws:sns:us-east-1:XXXXXX:mytopic'
-  stackParameters:
-    - ParameterKey: 'Keyname'
-      ParameterValue: 'Value'
-  # Disable automatic rollback by CloudFormation on failure. To be used for non-production environments.
-  disableRollback: true
-  rollbackConfiguration:
-    MonitoringTimeInMinutes: 20
-    RollbackTriggers:
-      - Arn: arn:aws:cloudwatch:us-east-1:000000000000:alarm:health
-        Type: AWS::CloudWatch::Alarm
-      - Arn: arn:aws:cloudwatch:us-east-1:000000000000:alarm:latency
-        Type: AWS::CloudWatch::Alarm
-  tracing:
-    # Can only be true if API Gateway is inside a stack.
-    apiGateway: true
-    # Optional, can be true (true equals 'Active'), 'Active' or 'PassThrough'
-    lambda: true
-```
+name: aws
 
-### General function settings
+# Default stage (default: dev)
+
+stage: dev
+
+# Default region (default: us-east-1)
+
+region: us-east-1
+
+# The AWS profile to use to deploy (default: "default" profile)
+
+profile: production
+
+# Use a custom name for the CloudFormation stack
+
+stackName: custom-stack-name
+
+# Optional CloudFormation tags to apply to APIs and functions
+
+tags:
+foo: bar
+baz: qux
+
+# Optional CloudFormation tags to apply to the stack
+
+stackTags:
+key: value
+
+# Method used for CloudFormation deployments: 'changesets' or 'direct' (default: changesets)
+
+# See https://www.serverless.com/framework/docs/providers/aws/guide/deploying#deployment-method
+
+deploymentMethod: direct
+
+# List of existing Amazon SNS topics in the same region where notifications about stack events are sent.
+
+notificationArns: - 'arn:aws:sns:us-east-1:XXXXXX:mytopic'
+stackParameters: - ParameterKey: 'Keyname'
+ParameterValue: 'Value'
+
+# Disable automatic rollback by CloudFormation on failure. To be used for non-production environments.
+
+disableRollback: true
+rollbackConfiguration:
+MonitoringTimeInMinutes: 20
+RollbackTriggers: - Arn: arn:aws:cloudwatch:us-east-1:000000000000:alarm:health
+Type: AWS::CloudWatch::Alarm - Arn: arn:aws:cloudwatch:us-east-1:000000000000:alarm:latency
+Type: AWS::CloudWatch::Alarm
+tracing: # Can only be true if API Gateway is inside a stack.
+apiGateway: true # Optional, can be true (true equals 'Active'), 'Active' or 'PassThrough'
+lambda: true
+
+````
+</details>
+</li>
+
+<li>
+<details>
+<summary>General function settings</summary>
 
 Some function settings can be defined for all functions inside the `provider` key:
-
 ```yml
-# serverless.yml
+  # serverless.yml
 
 provider:
-  runtime: nodejs14.x
-  runtimeManagement: auto # optional, set how Lambda controls all functions runtime. AWS default is auto; this can either be 'auto' or 'onFunctionUpdate'. For 'manual', see example in hello function below (syntax for both is identical
-  # Default memory size for functions (default: 1024MB)
-  memorySize: 512
-  # Default timeout for functions (default: 6 seconds)
-  # Note: API Gateway has a maximum timeout of 30 seconds
-  timeout: 10
-  # Function environment variables
-  environment:
-    APP_ENV_VARIABLE: FOOBAR
-  # Duration for CloudWatch log retention (default: forever).
-  # Can be overridden for each function separately inside the functions block, see below on page.
-  # Valid values: https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-logs-loggroup.html
-  logRetentionInDays: 14
-  # Policy defining how to monitor and mask sensitive data in CloudWatch logs
-  # Policy format: https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/mask-sensitive-log-data-start.html
-  logDataProtectionPolicy:
-    Name: data-protection-policy
-  # KMS key ARN to use for encryption for all functions
-  kmsKeyArn: arn:aws:kms:us-east-1:XXXXXX:key/some-hash
-  # Version of hashing algorithm used by Serverless Framework for function packaging
-  lambdaHashingVersion: 20201221
-  # Use function versioning (enabled by default)
-  versionFunctions: false
-  # Processor architecture: 'x86_64' or 'arm64' via Graviton2 (default: x86_64)
-  architecture: x86_64
-```
+runtime: nodejs14.x
+runtimeManagement: auto # optional, set how Lambda controls all functions runtime. AWS default is auto; this can either be 'auto' or 'onFunctionUpdate'. For 'manual', see example in hello function below (syntax for both is identical
+# Default memory size for functions (default: 1024MB)
+memorySize: 512
+# Default timeout for functions (default: 6 seconds)
+# Note: API Gateway has a maximum timeout of 30 seconds
+timeout: 10
+# Function environment variables
+environment:
+  APP_ENV_VARIABLE: FOOBAR
+# Duration for CloudWatch log retention (default: forever).
+# Can be overridden for each function separately inside the functions block, see below on page.
+# Valid values: https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-logs-loggroup.html
+logRetentionInDays: 14
+# Policy defining how to monitor and mask sensitive data in CloudWatch logs
+# Policy format: https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/mask-sensitive-log-data-start.html
+logDataProtectionPolicy:
+  Name: data-protection-policy
+# KMS key ARN to use for encryption for all functions
+kmsKeyArn: arn:aws:kms:us-east-1:XXXXXX:key/some-hash
+# Version of hashing algorithm used by Serverless Framework for function packaging
+lambdaHashingVersion: 20201221
+# Use function versioning (enabled by default)
+versionFunctions: false
+# Processor architecture: 'x86_64' or 'arm64' via Graviton2 (default: x86_64)
+architecture: x86_64
+````
 
-### Deployment bucket
+  </details>
+  </li>
+ </ol>
+</details>
+
+<details>
+  <summary>Deployment bucket</summary>
 
 Serverless Framework needs a S3 bucket to store artifacts for deploying. That bucket is automatically created and managed by Serverless, but you can configure it explicitly if needed:
 
-```yaml
+```yml
 provider:
   # The S3 prefix under which deployed artifacts are stored (default: serverless)
   deploymentPrefix: serverless
@@ -179,7 +211,10 @@ provider:
       key2: value2
 ```
 
-### API Gateway v2 HTTP API
+</details>
+
+<details>
+  <summary>API Gateway v2 HTTP API</summary>
 
 The `httpApi` settings apply to [API Gateway v2 HTTP APIs](../events/http-api.md):
 
@@ -237,7 +272,10 @@ provider:
         managedExternally: true
 ```
 
-### API Gateway v1 REST API
+</details>
+
+<details>
+  <summary>API Gateway v1 REST API</summary>
 
 The `apiGateway` settings apply to [API Gateway v1 REST APIs](../events/apigateway.md) and [websocket APIs](../events/websocket.md):
 
@@ -322,7 +360,10 @@ provider:
           description: 'A global model that can be referenced in functions'
 ```
 
-### ALB
+</details>
+
+<details>
+  <summary>ALB</summary>
 
 Configure [Application Load Balancer](../events/alb.md):
 
@@ -385,7 +426,10 @@ provider:
         sessionTimeout: 7000
 ```
 
-### Docker image deployments in ECR
+</details>
+
+<details>
+  <summary>Docker image deployments in ECR</summary>
 
 Configure [deployment via Docker images](./functions.md#referencing-container-image-as-a-target):
 
@@ -409,7 +453,10 @@ provider:
           - my-image:latest
 ```
 
-### CloudFront
+</details>
+
+<details>
+  <summary>CloudFront</summary>
 
 Configure the CloudFront distribution used for [CloudFront Lambda@Edge events](../events/cloudfront.md):
 
@@ -444,7 +491,10 @@ provider:
               - not-cached-query-string
 ```
 
-### IAM permissions
+</details>
+
+<details>
+  <summary>IAM permissions</summary>
 
 Configure IAM roles and permissions applied to Lambda functions ([complete documentation](./iam.md)):
 
@@ -498,7 +548,10 @@ provider:
             - AWS::EC2::Instance
 ```
 
-### VPC
+</details>
+
+<details>
+  <summary>VPC</summary>
 
 Configure the Lambda functions to run inside a VPC ([complete documentation](./functions.md#vpc-configuration)):
 
@@ -515,7 +568,10 @@ provider:
       - subnetId2
 ```
 
-### Logs
+</details>
+
+<details>
+  <summary>Logs</summary>
 
 Configure logs for the deployed resources:
 
@@ -565,7 +621,10 @@ provider:
     frameworkLambda: true
 ```
 
-### S3 buckets
+</details>
+
+<details>
+  <summary>S3 buckets</summary>
 
 Configure the S3 buckets created for [S3 Lambda events](../events/s3.md):
 
@@ -582,7 +641,10 @@ provider:
         Status: Enabled
 ```
 
-## Package
+</details>
+
+<details>
+  <summary>Package</summary>
 
 The `serverless package` or `serverless deploy` commands [package the code of all functions into zip files](./packaging.md).
 These zip files are then used for deployments.
@@ -606,7 +668,10 @@ package:
   excludeDevDependencies: false
 ```
 
-## Functions
+</details>
+
+<details>
+  <summary>Functions</summary>
 
 Configure the Lambda functions to deploy ([complete documentation](./functions.md)):
 
@@ -728,11 +793,17 @@ functions:
     maximumEventAge: 7200
 ```
 
-## Lambda events
+</details>
+
+<details>
+  <summary>Lambda events</summary>
 
 Reference of [Lambda events](./events.md) that trigger functions:
 
-### API Gateway v2 HTTP API
+<ol>
+<li>
+<details>
+  <summary>API Gateway v2 HTTP API</summary>
 
 [API Gateway v2 HTTP API events](../events/http-api.md):
 
@@ -753,9 +824,14 @@ functions:
               - user.email
 ```
 
-### API Gateway v1 REST API
+</details>
+</li>
 
-[API Gateway v1 REST API events](../events/apigateway.md):
+<li>
+<details>
+  <summary>API Gateway v1 REST API</summary>
+  
+  [API Gateway v1 REST API events](../events/apigateway.md):
 
 ```yaml
 functions:
@@ -815,7 +891,12 @@ functions:
             passThrough: NEVER
 ```
 
-### Websocket API
+</details>
+</li>
+
+<li>
+<details>
+  <summary>Websocket API</summary>
 
 [API Gateway websocket events](../events/websocket.md):
 
@@ -837,7 +918,12 @@ functions:
               - 'route.request.querystring.Auth'
 ```
 
-### S3
+</details>
+</li>
+
+<li>
+<details>
+  <summary>S3</summary>
 
 [S3 events](../events/s3.md):
 
@@ -859,7 +945,12 @@ functions:
           forceDeploy: true
 ```
 
-### Schedule
+</details>
+</li>
+
+<li>
+<details>
+  <summary>Schedule</summary>
 
 [Schedule events](../events/schedule.md):
 
@@ -888,7 +979,12 @@ functions:
             inputTemplate: '{"time": <eventTime>, "key1": "value1"}'
 ```
 
-### SNS
+</details>
+</li>
+
+<li>
+<details>
+  <summary>SNS</summary>
 
 [SNS events](../events/sns.md):
 
@@ -916,7 +1012,12 @@ functions:
               url: MyShared-DLQUrl
 ```
 
-### SQS
+</details>
+</li>
+
+<li>
+<details>
+  <summary>SQS</summary>
 
 [SQS events](../events/sqs.md):
 
@@ -938,7 +1039,12 @@ functions:
             - a: [1, 2]
 ```
 
-### Streams
+</details>
+</li>
+
+<li>
+<details>
+  <summary>Streams</summary>
 
 [Stream events](../events/streams.md):
 
@@ -959,7 +1065,12 @@ functions:
             - partitionKey: [1]
 ```
 
-### MSK
+</details>
+</li>
+
+<li>
+<details>
+  <summary>MSK</summary>
 
 [MSK events](../events/msk.md):
 
@@ -991,7 +1102,12 @@ functions:
                 a: [1, 2]
 ```
 
-### ActiveMQ
+</details>
+</li>
+
+<li>
+<details>
+  <summary>ActiveMQ</summary>
 
 [ActiveMQ events](../events/activemq.md):
 
@@ -1021,7 +1137,12 @@ functions:
                 a: [1, 2]
 ```
 
-### Kafka
+</details>
+</li>
+
+<li>
+<details>
+  <summary>Kafka</summary>
 
 [Kakfa events](../events/kafka.md):
 
@@ -1057,7 +1178,12 @@ functions:
             - eventName: INSERT
 ```
 
-### RabbitMQ
+</details>
+</li>
+
+<li>
+<details>
+  <summary>RabbitMQ</summary>
 
 [RabbitMQ events](../events/rabbitmq.md):
 
@@ -1089,7 +1215,12 @@ functions:
                 a: [1, 2]
 ```
 
-### Alexa
+</details>
+</li>
+
+<li>
+<details>
+  <summary>Alexa</summary>
 
 [Alexa Skill events](../events/alexa-skill.md) and [Alexa Smart Home events](../events/alexa-smart-home.md):
 
@@ -1108,7 +1239,12 @@ functions:
           enabled: false
 ```
 
-### IOT
+</details>
+</li>
+
+<li>
+<details>
+  <summary>IOT</summary>
 
 [IoT events](../events/iot.md):
 
@@ -1126,7 +1262,12 @@ functions:
           enabled: false
 ```
 
-### CloudWatch
+</details>
+</li>
+
+<li>
+<details>
+  <summary>CloudWatch</summary>
 
 [CloudWatch events](../events/cloudwatch-event.md) and [CloudWatch logs events](../events/cloudwatch-log.md):
 
@@ -1160,7 +1301,12 @@ functions:
           filter: '{$.userIdentity.type = Root}'
 ```
 
-### Cognito
+</details>
+</li>
+
+<li>
+<details>
+  <summary>Cognito</summary>
 
 [Cognito User Pool events](../events/cognito-user-pool.md):
 
@@ -1186,7 +1332,12 @@ functions:
           forceDeploy: true
 ```
 
-### ALB
+</details>
+</li>
+
+<li>
+<details>
+  <summary>ALB</summary>
 
 [Application Load Balancer events](../events/alb.md):
 
@@ -1213,7 +1364,12 @@ functions:
               httpCode: '200'
 ```
 
-### EventBridge
+</details>
+</li>
+
+<li>
+<details>
+  <summary>EventBridge</summary>
 
 [EventBridge events](../events/event-bridge.md):
 
@@ -1288,7 +1444,12 @@ functions:
           deadLetterQueueArn: !GetAtt QueueName.Arn
 ```
 
-### CloudFront
+</details>
+</li>
+
+<li>
+<details>
+  <summary>CloudFront</summary>
 
 [CloudFront Lambda@Edge events](../events/cloudfront.md):
 
@@ -1314,7 +1475,14 @@ functions:
               OriginProtocolPolicy: match-viewer
 ```
 
-## Function layers
+</details>
+</li>
+
+</ol> 
+</details>
+
+<details>
+  <summary>Function layers</summary>
 
 Deploy [Lambda function layers](./layers.md):
 
@@ -1346,7 +1514,10 @@ layers:
     retain: false
 ```
 
-## AWS Resources
+</details>
+
+<details>
+  <summary>AWS Resources</summary>
 
 [Customize the CloudFormation template](./services.md#serverlessyml), for example to deploy extra CloudFormation resource:
 
@@ -1387,3 +1558,5 @@ resources:
         # and http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/outputs-section-structure.html for documentation on use.
         Name: ${self:service}:${sls:stage}:UsersTableArn
 ```
+
+</details>
